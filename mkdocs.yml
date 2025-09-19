@@ -1,0 +1,5 @@
+site_name: Documentación de Alejandro
+
+nav:
+  - Inicio: index.md
+  - Proceso: proceso.md
