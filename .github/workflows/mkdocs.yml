@@ -1,0 +1,31 @@
+name: Build & Deploy MkDocs
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write   # necesario para poder empujar a gh-pages
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias
+        run: pip install mkdocs mkdocs-material ghp-import
+
+      - name: Compilar documentación
+        run: mkdocs build --strict
+
+      - name: Desplegar en GitHub Pages
+        run: mkdocs gh-deploy --force
+
+
