@@ -172,3 +172,174 @@ theme:
 mkdocs serve
 ```
 la documentación cambió automáticamente a la estética del tema Material, mostrando un diseño más moderno y visual.
+
+## 12. Uso de Docker para la documentación
+
+### 12.1 Creación del Dockerfile
+
+Creé un archivo llamado `Dockerfile` en la raíz del proyecto con el siguiente contenido:
+
+```dockerfile
+FROM python:3.12-slim
+
+# Variables de entorno para que Python no genere archivos innecesarios
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1     PYTHONDONTWRITEBYTECODE=1     PYTHONUNBUFFERED=1
+
+# Instalar MkDocs + Material + ghp-import
+RUN pip install --no-cache-dir mkdocs mkdocs-material ghp-import
+
+# Directorio de trabajo dentro del contenedor
+WORKDIR /site
+
+# Exponer el puerto 8000
+EXPOSE 8000
+
+# Comando por defecto para levantar el servidor
+CMD ["mkdocs", "serve", "-a", "0.0.0.0:8000"]
+```
+
+**Resultado:** Dockerfile preparado para construir una imagen con Python, MkDocs y el tema Material.
+
+---
+
+### 12.2 Creación del archivo docker-compose.yml
+
+Creé un archivo `docker-compose.yml` con el siguiente contenido:
+
+```yaml
+services:
+  mkdocs:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/site
+    command: mkdocs serve -a 0.0.0.0:8000
+```
+
+**Resultado:** Configuración lista para levantar el servidor de MkDocs de forma sencilla con un solo comando.
+
+---
+
+### 12.3 Construcción de la imagen
+
+**Comando usado:**
+
+```bash
+docker compose build
+```
+
+**Resultado:** Se construyó la imagen de Docker con Python 3.12, MkDocs, Material y ghp-import.  
+La consola mostró la descarga de la imagen base y la instalación de dependencias.
+
+---
+
+### 12.4 Levantar el servidor dentro del contenedor
+
+**Comando usado:**
+
+```bash
+docker compose up
+```
+
+**Resultado:** El sitio de documentación se sirvió correctamente en `http://localhost:8000`, ejecutándose dentro de un contenedor Docker.
+
+---
+
+### 12.5 Parar y limpiar contenedores
+
+**Comandos usados:**
+
+```bash
+# detener el servidor
+CTRL + C
+
+# eliminar contenedores y red
+docker compose down
+```
+
+**Resultado:** El contenedor se detuvo y se liberaron los recursos de Docker.
+
+
+## 14. Operaciones avanzadas en Git (ejecutadas)
+
+>Estas operaciones las realicé en el repositorio `alejandro-documentacion`.
+
+---
+
+iniciar bisect
+```bash
+git bisect start
+```
+marcar el commit actual como **"malo"**
+```bash
+git bisect bad
+```
+
+marcar un commit antiguo donde todo funcionaba como **"bueno"**
+```bash
+git bisect good <...>
+```
+
+Git me lleva a un punto intermedio; probé el sitio **(mkdocs serve)**
+```bash
+git bisect bad   **fallaba**
+```
+
+repetí el proceso hasta que Git dio el primer commit malo
+
+**al terminar:**
+```bash
+git bisect reset
+```
+
+## 15. Seguridad en los sistemas de control de versiones
+
+### 15.1 Uso de `.gitignore` para evitar subir archivos innecesarios
+Creé un archivo `.gitignore` en la raíz del proyecto con el siguiente contenido:
+
+```text
+site/
+__pycache__/
+.DS_Store
+.env
+```
+
+## 16. Integración continua (CI/CD) con GitHub Actions
+
+### 16.1 Creación del workflow de despliegue automático
+Creé el archivo `.github/workflows/mkdocs.yml` con el contenido:
+
+```yaml
+name: Build & Deploy MkDocs
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias
+        run: pip install mkdocs mkdocs-material ghp-import
+
+      - name: Compilar documentación
+        run: mkdocs build --strict
+
+      - name: Desplegar en GitHub Pages
+        run: mkdocs gh-deploy --force
+````
+
+**Resultado:** En cada push a main, GitHub Actions compila la documentación y publica automáticamente en la rama gh-pages.
