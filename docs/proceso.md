@@ -344,3 +344,87 @@ jobs:
 ```
 
 **Resultado:** En cada push a main, GitHub Actions compila la documentación y publica automáticamente en la rama gh-pages.
+
+---
+
+## 16. Desarrollo y documentación de la librería matemática
+
+### 16.1 Integración de la librería
+Integré la carpeta `maths/` del repositorio de ejemplo `sphinx_basics` dentro de mi proyecto `alejandro-documentacion`.  
+La librería contiene cuatro funciones matemáticas básicas: `add`, `subtract`, `multiply` y `divide`.
+
+---
+
+### 16.2 Cambios realizados
+- Todas las funciones fueron modificadas para aceptar un número indefinido de argumentos mediante `*args`.
+- La lógica de cada función se adaptó al nuevo esquema:
+  - `add` ahora suma todos los argumentos.
+  - `subtract` resta de manera secuencial.
+  - `multiply` multiplica todos los valores.
+  - `divide` divide de forma secuencial, comprobando que no se divida entre cero.
+- Los **docstrings** fueron actualizados para documentar el uso de `*args` y proporcionar ejemplos de uso.
+
+---
+
+### 16.3 Ejemplos documentados
+Los docstrings incluyen ejemplos claros:
+
+```python
+>>> add(2, 3, 5)
+10
+
+>>> subtract(100, 20, 30, 40)
+10
+
+>>> multiply(2, 3, 4)
+24
+
+>>> divide(100, 2, 5)
+10.0
+```
+
+## 16.4 Pruebas realizadas
+Probé las funciones desde la consola de Python:
+
+```python
+from maths import add, subtract, multiply, divide
+
+print(add(2, 3, 5))             # 10
+print(subtract(100, 20, 30, 40)) # 10
+print(multiply(2, 3, 4))         # 24
+print(divide(100, 2, 5))         # 10.0
+```
+
+**Resultado:** Todas las funciones funcionan correctamente con múltiples argumentos y los ejemplos documentados son congruentes con los cambios realizados.
+
+---
+
+## 17. Pruebas de la librería matemática
+
+### 17.1 Creación de un script de pruebas
+Para verificar que las funciones de la librería `maths` funcionan correctamente, creé el archivo `test_math.py`con el siguiente contenido:
+
+```python
+import sys, os
+sys.path.append(os.getcwd())
+
+from maths import add, subtract, multiply, divide
+
+print("add(2, 3, 5) =", add(2, 3, 5))                   # 10
+print("subtract(100, 20, 30, 40) =", subtract(100, 20, 30, 40))  # 10
+print("multiply(2, 3, 4) =", multiply(2, 3, 4))         # 24
+print("divide(100, 2, 5) =", divide(100, 2, 5))         # 10.0
+```
+
+## 18.2 Ejecución de las pruebas
+Ejecuté el script con el comando:
+```bash
+python3 test_math.py
+```
+El resultado obtenido fue el esperado:
+```python
+add(2, 3, 5) = 10
+subtract(100, 20, 30, 40) = 10
+multiply(2, 3, 4) = 24
+divide(100, 2, 5) = 10.0
+```
