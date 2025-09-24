@@ -37,9 +37,3 @@ maths/
 ├── multiply.py
 └── divide.py
 ```
-
-## Conclusión
-Esta librería sirve como ejemplo práctico de:
-- Cómo implementar funciones con *args.
-- Cómo documentar y probar código en Python.
-- Cómo integrar el desarrollo en un flujo con Git, Docker, MkDocs y CI/CD.
