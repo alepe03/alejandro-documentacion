@@ -1,7 +1,7 @@
 # Librería Matemática
 
 Este proyecto incluye una librería matemática llamada **`maths`** desarrollada como parte de la práctica.  
-La librería ha sido integrada en el repositorio y documentada con MkDocs.
+La librería ha sido integrada en el repositorio y documentada con MkDocs usando el tema materialize.
 
 ---
 
